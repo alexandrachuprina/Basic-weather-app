@@ -1,5 +1,28 @@
-body {
+@font-face {
+  font-family: NeueMetanaNext;
+  font-weight: bold;
+  src: url('/Users/lksndrchprn/basic-weather-app/src/fonts/NeueMetanaNext/NeueMetanaNext-SemiBold.otf') format("opentype");
+}
+@font-face {
+  font-family: NeueMetanaNextOutline;
+  src: url('/Users/lksndrchprn/basic-weather-app/src/fonts/NeueMetanaNext/NeueMetanaNextOutline-Black.otf') format("opentype");
+}
+@font-face {
+  font-family: NeueMetanaBold;
+  font-weight: bold;
+  src: url('/Users/lksndrchprn/basic-weather-app/src/fonts/NeueMetana/NeueMetana-Bold.otf') format("opentype");
+}
+@font-face {
+  font-family: NeueMetanaRegular;
+  font-weight: medium;
+  src: url('/Users/lksndrchprn/basic-weather-app/src/fonts/NeueMetana/NeueMetana-Regular.otf') format("opentype");
+}
+
+body,
+html {
   margin: 0;
+  padding: 0;
+  background-color: black;
 }
 
 * {
@@ -10,8 +33,16 @@ h2,
 h1 {
   margin: 0;
   padding: 0;
+  font-size: 1rem;
+  color: white;
 }
 p {
   margin: 0;
   padding: 0;
+  font-size: 1rem;
+  font-family: NeueMetanaRegular;
+  color: white;
+}
+h2 {
+  font-family: NeueMetanaNext;
 }
