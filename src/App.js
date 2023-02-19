@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import anime from 'animejs';
 
 import styled from "styled-components";
-import { size, max, min } from './styles/breakpoints';
+import { sizes } from './styles/breakpoints';
 
 function App() {
   const [location, setLocation] = useState();
@@ -12,15 +11,12 @@ function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
   const [toggle, setToggle] = useState(true)
-  const [opacity, setOpacity] = useState(0)
-
-  const ref = useRef();
 
   const APIkey = 'c00b195a3e3fe02badc1a13a06366034';
-  const firstURL = `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=5&appid=${APIkey}`;
+  const firstURL = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=5&appid=${APIkey}`;
   const secondURL = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${APIkey}&units=metric`;
 
-  function getCoordinates(event) {
+  function getCoordinates() {
     fetch(firstURL)
       .then(response => response.text())
       .then(text => JSON.parse(text))
@@ -57,7 +53,7 @@ function App() {
             })
         }
       })
-      .catch(error => {console.log(`ERROR: ${error}`); setError(true)})
+      .catch(error => { console.log(`ERROR: ${error}`); setError(true) })
 
   }, [lat, lon])
 
@@ -70,43 +66,14 @@ function App() {
   let date6;
 
   if (data) {
-    date0 = new Date(data.daily[0].dt * 1000).toLocaleDateString();
-    date1 = new Date(data.daily[1].dt * 1000).toLocaleDateString();
-    date2 = new Date(data.daily[2].dt * 1000).toLocaleDateString();
-    date3 = new Date(data.daily[3].dt * 1000).toLocaleDateString();
-    date4 = new Date(data.daily[4].dt * 1000).toLocaleDateString();
-    date5 = new Date(data.daily[5].dt * 1000).toLocaleDateString();
-    date6 = new Date(data.daily[6].dt * 1000).toLocaleDateString();
+    date0 = new Date(data.daily[0].dt * 1000).getDate();
+    date1 = new Date(data.daily[1].dt * 1000).getDate();
+    date2 = new Date(data.daily[2].dt * 1000).getDate();
+    date3 = new Date(data.daily[3].dt * 1000).getDate();
+    date4 = new Date(data.daily[4].dt * 1000).getDate();
+    date5 = new Date(data.daily[5].dt * 1000).getDate();
+    date6 = new Date(data.daily[6].dt * 1000).getDate();
   }
-
-  // STYLE
-
-  let nameXXS;
-  let nameXS;
-  let nameS;
-  let naemM;
-  let nameL;
-  if (name) {
-    if (name.length === 15 || name.length === 16 || name.length === 17 || name.length === 18 || name.length === 19) {
-      nameL = '12vh'
-    } else if (name.length === 10 || name.length === 11) {
-      nameL = '16vh'
-    } else if (name.length === 12 || name.length === 13 || name.length === 14) {
-      nameL = '18vh'
-    } else if (name.length > 2) {
-      nameL = '10vh'
-    }
-  }
-
-  const center = {
-    lat: 44,
-    lng: 88
-  };
-
-  const containerStyle = {
-    width: '400px',
-    height: '400px'
-  };
 
   return (
     <Page style={{ zIndex: -1 }}>
@@ -118,8 +85,6 @@ function App() {
         />
         <Button onClick={() => getCoordinates()}><p>Get</p></Button>
       </SearchBar>
-
-      <Animation className="tick-demo" opacity={opacity} />
 
       {error ?
         <ErrorBar>
@@ -137,10 +102,8 @@ function App() {
         null}
 
       {data ?
-
         <Info>
-
-          <MainInfo nameL={nameL}>
+          <MainInfo>
             <div>
               <p>City: {name}</p>
               <h2>t {Math.floor(data.current.temp)}°C</h2>
@@ -150,7 +113,6 @@ function App() {
               <p>Humidity {data.current.humidity}</p>
             </div>
           </MainInfo>
-
           <AdditionalInfo>
             <Daily>
               <div><p>Daily</p></div>
@@ -220,12 +182,10 @@ function App() {
                 <p>{data.daily[6].wind_speed}</p>
               </div>
 
-              <div></div>
-              <div style={{borderBottom: '1px solid white'}}><p>Hourly</p></div>
             </Daily>
-
-            <div style={{ overflowY: 'scroll', height: '44vh' }}>
+            <Wrapper>
               <Hourly>
+                <div><p>Hourly</p></div>
                 <div>
                   <p>hour</p>
                   <p>weather</p>
@@ -404,10 +364,8 @@ function App() {
                   <p>{Math.floor(data.hourly[23].feels_like)}°C</p>
                   <p>{data.hourly[23].wind_speed}</p>
                 </div>
-
               </Hourly>
-            </div>
-
+            </Wrapper>
           </AdditionalInfo>
         </Info>
         : null}
@@ -429,9 +387,18 @@ const Page = styled.div`
   height: 100vh;
   align-items: center;
   background-color: black;
-
   p {
     font-size: 2vh;
+  }
+
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
+    height: calc(116vh);
+  }
+  @media (min-width: ${sizes.xxs}) and (max-width: ${sizes.xs}) {
+    height: calc(123vh + 6vh);
+  }
+  @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
+    height: 100vh;
   }
 `
 const SearchBar = styled.div`
@@ -441,9 +408,13 @@ const SearchBar = styled.div`
   align-items: center;
   border-bottom: 2px solid white;
   width: 100vw;
-  height: 6vh;
   min-height: 6vh;
-  padding-left: 5rem;
+  padding-left: 2vw;
+  box-sizing: border-box;
+
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
+    padding-left: 2vw;
+  }
 `
 const ErrorBar = styled.div`
   display: flex;
@@ -462,13 +433,12 @@ const ErrorBar = styled.div`
   top: 6vh;
   background-color: orange;
 
-  @media ${max.s}{
+  @media (max-width: ${sizes.s}){
     p {
       font-size: 0.5vh;
     }
   }
-
-  @media ${max.m}{
+  @media (max-width: ${sizes.m}){
     p {
       font-size: 2vh;
     }
@@ -498,7 +468,7 @@ const Info = styled.div`
   width: 100%;
   height: 88vh;
 
-  @media ${max.l}{
+  @media (max-width: ${sizes.l}){
     display: flex;
     flex-direction: column;
   }
@@ -531,10 +501,12 @@ const MainInfo = styled.div`
     }
   }
 
-  @media (min-width: 100px) and (max-width: 300px){
+  @media (min-width: ${sizes.micro} ) and (max-width: ${sizes.mini}){
     padding: 2vh 0 1vh 2.5rem;
     width: 100vw;
     border-right: none;
+    height: 48vh;
+    box-sizing: border-box;
 
     background-color: red;
     h1 {
@@ -552,10 +524,11 @@ const MainInfo = styled.div`
     }
   }
 
-  @media (min-width: 300px) and (max-width: 480px){
+  @media (min-width: ${sizes.mini}) and (max-width: ${sizes.xxs}){
     padding: 2vh 0 1vh 2.5rem;
     width: 100vw;
     border-right: none;
+    height: 48vh;
 
     background-color: orange;
     h1 {
@@ -573,12 +546,12 @@ const MainInfo = styled.div`
     }
   }
 
-  @media (min-width: 480px) and (max-width: 900px){
+  @media (min-width: ${sizes.xxs}) and (max-width: ${sizes.m}){
     padding: 4vh 0 1vh 2.5rem;
     width: 100vw;
     border-right: none;
     block-size: fit-content;
-    height: 100%;
+    height: 48vh;
 
     background-color: yellow;
     h1 {
@@ -596,13 +569,12 @@ const MainInfo = styled.div`
     }
   }
 
-  @media (min-width: 900px) and (max-width: 1024px) {
+  @media (min-width:  ${sizes.m}) and (max-width:  ${sizes.l}) {
     background-color: green;
     padding: 2vh 0 6vh 2.5rem;
     width: 60vw;
-    /* border-right: none; */
+    height: 48vh;
   }
- 
 `
 const AdditionalInfo = styled.div`
   display: flex;
@@ -611,31 +583,36 @@ const AdditionalInfo = styled.div`
   height: 100%;
   border-left: 2px solid white;
   box-sizing: border-box;
+
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xs}) {
+    width: 100vw;
+    border-left: none;
+  }
+  @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
+    display: flex;
+    flex-direction: row;
+    border-left: none;
+    width: 100vw;
+    height: 40vh;
+  }
+
 `
 const Daily = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* height: 50%; */
   justify-content: flex-start;
   align-items: flex-start;
-  /* box-sizing: border-box; */
-  
   div {
     display: grid;
     grid-template-columns: repeat(5, 20%);
-    padding-left: 1vw;
     align-content: center;
     justify-items: start;
     border-bottom: 0.5px solid white;
     width: 100%;
     height: 4vh;
-    &:first-child {
-      border-top: 0.5px solid white;
-    }
     &:last-child {
-      border-bottom: none;
-      border-top: 0.5px solid white;
+      border-bottom: 2px solid white;
     }
     &:hover {
       font-style: italic;
@@ -645,35 +622,78 @@ const Daily = styled.div`
       }
     }
   }
-
   p {
     font-size: 1.4vh;
+    padding-left: 1vw;
   }
 
-  @media ${max.s}{
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
     div {
-      height: 4vh;
+      justify-items: center;
+    }
+    p {
+      font-size: 1vh;
     }
   }
-
-  @media ${max.l}{
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xs}) {
     width: 100vw;
+    height: 40vh;
     div {
-      padding-left: 2.5rem;
+      &:first-child {
+        border-top: 2px solid white;
+      }
+      &:last-child {
+      border-bottom: none;
     }
+    }
+  }
+  @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
+    width: 50%;
+    height: 40.7vh;
+    div {
+      padding-left: 0;
+      height: 4vh;
+      &:first-child {
+        border-top: 2px solid white;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+      p {
+        padding-left: 1vw;
+      }
+    }
+
+  }
+  
+`
+const Wrapper = styled.div`
+  overflow-y: scroll;
+  height: 48vh;
+  width: 100%;
+  background-color: black;
+
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xs}) {
+    width: 100vw;
+    height: 40vh;
+  }
+  @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
+    width: 50%;
+    height: 40vh;
+    border-left: 2px solid white;
+    border-top: 2px solid white;
   }
 `
 const Hourly = styled.div`
   display: flex;
   flex-direction: column;
-  width: 40vw;
+  width: 100%;
   justify-content: flex-start;
   align-items: flex-start;
-  
+
   div {
     display: grid;
     grid-template-columns: repeat(5, 20%);
-    padding-left: 1vw;
     align-content: center;
     justify-items: start;
     border-bottom: 0.5px solid white;
@@ -690,21 +710,39 @@ const Hourly = styled.div`
       }
     }
   }
-
   p {
     font-size: 1.4vh;
+    padding-left: 1vw;
   }
 
-  @media ${max.s}{
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
     div {
-      height: 4vh;
+      justify-items: center;
+    }
+    p {
+      font-size: 1vh;
+    }
+  }
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xs}) {
+    width: 100%;
+    div {
+      &:first-child {
+        border-top: 2px solid white;
+      }
     }
   }
 
-  @media ${max.l}{
-    width: 100vw;
+  @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
+    width: 100%;
     div {
-      padding-left: 2.5rem;
+      padding-left: 0;
+      height: 4vh;
+      &:last-child {
+        border-bottom: none;
+      }
+      p {
+        padding-left: 1vw;
+      }
     }
   }
 `
@@ -718,8 +756,8 @@ const Footer = styled.div`
   min-height: 6vh;
   height: 6vh;
   margin-top: auto;
-  padding-left: 5rem;
-
+  padding-left: 2vw;
+  box-sizing: border-box;
   p {
     color: white;
   }
@@ -729,6 +767,10 @@ const Footer = styled.div`
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
+    padding-left: 2vw;
   }
 `
 const Input = styled.input`
@@ -802,18 +844,4 @@ const Button = styled.button`
       color: white;
     } 
   }
-
-  @media ${max.xxs} {
-
-  }
-`
-const Animation = styled.div`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background-color: white;
-  border-radius: 50%;
-  top: 74vh;
-  left: 0;
-  opacity: ${p => p.opacity};
 `
