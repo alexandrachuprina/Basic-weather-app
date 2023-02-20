@@ -508,7 +508,7 @@ const MainInfo = styled.div`
     height: 48vh;
     box-sizing: border-box;
 
-    background-color: red;
+    /* background-color: red; */
     h1 {
       font-size: 8vh;
     }
@@ -523,14 +523,13 @@ const MainInfo = styled.div`
       }
     }
   }
-
   @media (min-width: ${sizes.mini}) and (max-width: ${sizes.xxs}){
     padding: 2vh 0 1vh 2.5rem;
     width: 100vw;
     border-right: none;
     height: 48vh;
 
-    background-color: orange;
+    /* background-color: orange; */
     h1 {
       font-size: 10vh;
     }
@@ -545,7 +544,6 @@ const MainInfo = styled.div`
       }
     }
   }
-
   @media (min-width: ${sizes.xxs}) and (max-width: ${sizes.m}){
     padding: 4vh 0 1vh 2.5rem;
     width: 100vw;
@@ -553,7 +551,7 @@ const MainInfo = styled.div`
     block-size: fit-content;
     height: 48vh;
 
-    background-color: yellow;
+    /* background-color: yellow; */
     h1 {
       font-size: 14vh;
     }
@@ -568,7 +566,6 @@ const MainInfo = styled.div`
       }
     }
   }
-
   @media (min-width:  ${sizes.m}) and (max-width:  ${sizes.l}) {
     background-color: green;
     padding: 2vh 0 6vh 2.5rem;
@@ -676,6 +673,7 @@ const Wrapper = styled.div`
   @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xs}) {
     width: 100vw;
     height: 40vh;
+    border-top: 2px solid white;
   }
   @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
     width: 50%;
@@ -718,6 +716,9 @@ const Hourly = styled.div`
   @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
     div {
       justify-items: center;
+      &:first-child {
+        border-top: none;
+      }
     }
     p {
       font-size: 1vh;
@@ -727,11 +728,10 @@ const Hourly = styled.div`
     width: 100%;
     div {
       &:first-child {
-        border-top: 2px solid white;
+        border-top: none;
       }
     }
   }
-
   @media (min-width: ${sizes.xs}) and (max-width: ${sizes.l}){
     width: 100%;
     div {
@@ -771,6 +771,9 @@ const Footer = styled.div`
 
   @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
     padding-left: 2vw;
+    p {
+    font-size: 1.5vh;
+  }
   }
 `
 const Input = styled.input`
