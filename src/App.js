@@ -112,7 +112,6 @@ const Page = styled.div`
   p {
     font-size: 2vh;
   }
-
   @media (min-width: ${sizes.micro}) and (max-width: ${sizes.xxs}) {
     height: calc(116vh);
   }
